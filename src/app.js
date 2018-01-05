@@ -88,13 +88,42 @@ class App extends React.Component {
   }
 
   onSwipeMove(position, event) {
+
     console.log(`Moved ${position.x} pixels horizontally`, event);
     console.log(`Moved ${position.y} pixels vertically`, event);
+
+    if(position.x > 0){
+    if(this.state.position < Math.abs(position.x)){
     this.setState({left: position.x,
                    position: position.x,
                    top: position.y,
-                   opacity: this.state.opacity - .15})
+                   opacity: this.state.opacity - .10})
+  } else if(this.state.position > Math.abs(position.x)){
+    this.setState({left: position.x,
+                   position: position.x,
+                   top: position.y,
+                   opacity: this.state.opacity + .10})
   }
+} else{
+  if(this.state.position > position.x){
+    console.log('decreasing opacity????')
+  this.setState({left: position.x,
+                 position: position.x,
+                 top: position.y,
+                 opacity: this.state.opacity - .10})
+} else if(this.state.position < position.x){
+  console.log('increasing opacity')
+  this.setState({left: position.x,
+                 position: position.x,
+                 top: position.y,
+                 opacity: this.state.opacity + .10})
+}
+}
+
+
+
+
+}
 
   onSwipeEnd(event) {
     // console.log('End swiping...', event);
@@ -114,6 +143,13 @@ class App extends React.Component {
       } else {
         setTimeout(() => {this.NoButton()}, 500);
       }
+    } else{
+      this.setState({
+        position: 0,
+        top: 5,
+        left: 0,
+        opacity: 1
+      })
     }
   }
 
