@@ -85,6 +85,9 @@ const Coupons = sequelize.define('coupons', {
   saved:{
     type: Sequelize.STRING,
     defaultValue: 'null'
+  },
+  pureUrl:{
+    type: Sequelize.STRING
   }
 })
 
