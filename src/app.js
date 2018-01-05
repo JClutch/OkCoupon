@@ -8,8 +8,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image_url: this.props.Coupon.imgUrl || 'http://psdwizard.com/wp-content/uploads/2016/07/octo-loader.gif',
-      title: this.props.Coupon.title, 
+      image_url: this.props.Coupon.imgUrl || 'http://www.scaa.org.hk/Public/images/swipe_right.gif',
+      title: this.props.Coupon.title,
       merchant_name: this.props.Coupon.merchant,
       price: this.props.Coupon.price,
       discount_percentage: this.props.Coupon.discount,
@@ -88,13 +88,42 @@ class App extends React.Component {
   }
 
   onSwipeMove(position, event) {
+
     console.log(`Moved ${position.x} pixels horizontally`, event);
     console.log(`Moved ${position.y} pixels vertically`, event);
+
+    if(position.x > 0){
+    if(this.state.position < Math.abs(position.x)){
     this.setState({left: position.x,
                    position: position.x,
                    top: position.y,
-                   opacity: this.state.opacity - .15})
+                   opacity: this.state.opacity - .10})
+  } else if(this.state.position > Math.abs(position.x)){
+    this.setState({left: position.x,
+                   position: position.x,
+                   top: position.y,
+                   opacity: this.state.opacity + .10})
   }
+} else{
+  if(this.state.position > position.x){
+    console.log('decreasing opacity????')
+  this.setState({left: position.x,
+                 position: position.x,
+                 top: position.y,
+                 opacity: this.state.opacity - .10})
+} else if(this.state.position < position.x){
+  console.log('increasing opacity')
+  this.setState({left: position.x,
+                 position: position.x,
+                 top: position.y,
+                 opacity: this.state.opacity + .10})
+}
+}
+
+
+
+
+}
 
   onSwipeEnd(event) {
     // console.log('End swiping...', event);
@@ -114,6 +143,13 @@ class App extends React.Component {
       } else {
         setTimeout(() => {this.NoButton()}, 500);
       }
+    } else{
+      this.setState({
+        position: 0,
+        top: 5,
+        left: 0,
+        opacity: 1
+      })
     }
   }
 

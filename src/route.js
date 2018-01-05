@@ -23,7 +23,7 @@ const Navigation = () => (
         <div className="container" styles={{"height": "100%", "width": "100%"}}>
           <div className="container">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <a className="navbar-brand" href="#">OkCoupon</a>
+              <a className="navbar-brand" href="#"><img style={{"width": "75%", "height": "auto", "opacity": "0.7"}} src="https://files.slack.com/files-pri/T2SUXDE72-F8PRWGUET/pasted_image_at_2018_01_04_07_19_pm.png"/></a>
               <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
