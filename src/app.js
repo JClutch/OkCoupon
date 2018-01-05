@@ -27,7 +27,6 @@ class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("before setState:", this.state, "this props:", nextProps);
     this.setState({
       image_url: nextProps.Coupon.imgUrl,
       title: nextProps.Coupon.title,
@@ -39,10 +38,6 @@ class App extends React.Component {
       left: 0,
       opacity: 1
     })
-  }
-
-  componentDidUpdate(){
-    console.log("inside app anfd updating", this.state)
   }
 
   getDeals() {
@@ -88,9 +83,8 @@ class App extends React.Component {
   }
 
   onSwipeMove(position, event) {
-
-    console.log(`Moved ${position.x} pixels horizontally`, event);
-    console.log(`Moved ${position.y} pixels vertically`, event);
+    // console.log(`Moved ${position.x} pixels horizontally`, event);
+    // console.log(`Moved ${position.y} pixels vertically`, event);
 
     if(position.x > 0){
     if(this.state.position < Math.abs(position.x)){
@@ -106,13 +100,11 @@ class App extends React.Component {
   }
 } else{
   if(this.state.position > position.x){
-    console.log('decreasing opacity????')
   this.setState({left: position.x,
                  position: position.x,
                  top: position.y,
                  opacity: this.state.opacity - .10})
 } else if(this.state.position < position.x){
-  console.log('increasing opacity')
   this.setState({left: position.x,
                  position: position.x,
                  top: position.y,

@@ -66,7 +66,6 @@ class Main extends React.Component {
   }
 
   handleClick () {
-    console.log('going postal!!!!!', this.state.postal)
     let postal = this.state.postal
     if(postal > 1001 && postal < 99950){
       axios.post('/helper', {postal: this.state.postal}).then((res)=>{
@@ -74,9 +73,7 @@ class Main extends React.Component {
       })
       .then(() => {
       axios.get('/arrayCoupons').then((response) => {
-        console.log('is the problem here??', response.data)
         this.foo(response.data);
-        console.log("Coupons:",this.state.coupons);
       })
     })
     }

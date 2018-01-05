@@ -75,7 +75,6 @@ app.post('/no', (req, res) => {
   app.set('port', process.env.PORT || 3000)
 
   const server = app.listen(app.get('port'))
-  console.log(server)
   const host = server.address().address;
   const port = server.address().port;
   console.log('Example app listening at http://%s:%s', host, port);
