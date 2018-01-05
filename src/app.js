@@ -8,8 +8,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image_url: this.props.Coupon.imgUrl || 'http://psdwizard.com/wp-content/uploads/2016/07/octo-loader.gif',
-      title: this.props.Coupon.title, 
+      image_url: this.props.Coupon.imgUrl || 'http://www.scaa.org.hk/Public/images/swipe_right.gif',
+      title: this.props.Coupon.title,
       merchant_name: this.props.Coupon.merchant,
       price: this.props.Coupon.price,
       discount_percentage: this.props.Coupon.discount,
