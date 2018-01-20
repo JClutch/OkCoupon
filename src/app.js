@@ -2,53 +2,74 @@ import React from 'react';
 import CouponCard from './CouponCard.js';
 import Swipe from 'react-easy-swipe';
 import axios from 'axios';
+import Map from './map.js';
+import Cookies from 'universal-cookie'
 
+const cookies = new Cookies()
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       image_url: this.props.Coupon.imgUrl || 'http://psdwizard.com/wp-content/uploads/2016/07/octo-loader.gif',
-      title: this.props.Coupon.title, 
+      url: this.props.Coupon.url,
+      title: this.props.Coupon.title,
       merchant_name: this.props.Coupon.merchant,
       price: this.props.Coupon.price,
       discount_percentage: this.props.Coupon.discount,
       id: this.props.Coupon.id,
+      lat: this.props.Coupon.latitude,
+      lon: this.props.Coupon.longitude,
       position: 0,
       top: 5,
       left: 0,
-      opacity: 1
+      opacity: 1,
+      mapDisplay: false,
+      saveCount: undefined,
     }
     this.YesButton = this.YesButton.bind(this);
     this.NoButton = this.NoButton.bind(this);
     this.onSwipeStart = this.onSwipeStart.bind(this);
     this.onSwipeMove = this.onSwipeMove.bind(this);
     this.onSwipeEnd = this.onSwipeEnd.bind(this);
+    this.toggleMap = this.toggleMap.bind(this);
+  }
+
+  toggleMap(e) {
+    this.setState({mapDisplay: !this.state.mapDisplay});
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("before setState:", this.state, "this props:", nextProps);
+    console.log("this props:", nextProps);
     this.setState({
       image_url: nextProps.Coupon.imgUrl,
+      url: nextProps.Coupon.url,
       title: nextProps.Coupon.title,
       merchant_name: nextProps.Coupon.merchant,
       price: nextProps.Coupon.price,
       discount_percentage: nextProps.Coupon.discount,
       id: nextProps.Coupon.id,
+      lat: nextProps.Coupon.latitude,
+      lon: nextProps.Coupon.longitude,
       top: 5,
       left: 0,
       opacity: 1
-    })
+    }, () => {
+      axios.get('/saveCount', {params: {"image_url": this.state.image_url}})
+      .then((result) => {
+        this.setState({saveCount: result.data.length});
+      });
+    });
   }
 
-  componentDidUpdate(){
-    console.log("inside app anfd updating", this.state)
+  componentDidMount(){
+    // console.log("inside app anfd updating", this.state)
   }
 
   getDeals() {
     axios.get('/')
     .then(function(response) {
-      console.log('successful post');
+      // console.log('successful post');
     })
     .catch((err) => {
       console.error(err);
@@ -56,11 +77,15 @@ class App extends React.Component {
   }
 
   YesButton() {
+    var id = cookies.get('userID')
+    console.log('coupon data: ', this.state);
     axios.post('/yes', {
-      id: this.state.id
+      // ETHAN
+      userID: id,
+      data: this.state
     })
       .then((response) => {
-        console.log('response from clicking yes', response)
+        // console.log('response from clicking yes', response)
       })
       .catch((err) => {
         console.error(err);
@@ -68,28 +93,26 @@ class App extends React.Component {
 
 
       this.props.Increment();
+      if ( this.state.mapDisplay ) this.setState({mapDisplay: false});
   }
 
+  ////////////////// ETHAN
   NoButton() {
-    axios.post('/no', {
-      id: this.state.id
-    })
-      .then((response) => {
-        console.log("response from clicking no", response)
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-      this.props.Increment()
+  // delete express route,
+  // just call Increment to
+  // get the next coupon.
+    this.props.Increment();
+    if ( this.state.mapDisplay ) this.setState({mapDisplay: false});
   }
+  /////////////////////////
 
   onSwipeStart(event) {
-    console.log('Start swiping...', event);
+    // console.log('Start swiping...', event);
   }
 
   onSwipeMove(position, event) {
-    console.log(`Moved ${position.x} pixels horizontally`, event);
-    console.log(`Moved ${position.y} pixels vertically`, event);
+    // console.log(`Moved ${position.x} pixels horizontally`, event);
+    // console.log(`Moved ${position.y} pixels vertically`, event);
     this.setState({left: position.x,
                    position: position.x,
                    top: position.y,
@@ -118,13 +141,14 @@ class App extends React.Component {
   }
 
   render() {
-        console.log("APP.JS COUPONS", this.props.Coupon, "This state:",this.state)
     return (
       <div className="valueHolder" value={this.state.postion} styles={{"height": "100%", "width": "100%"}}>
-        <Swipe
+        <button id="showMap" onClick={this.toggleMap}>{this.state.mapDisplay ? "show coupon" : "show location"}</button>
+        { this.state.mapDisplay ? <Map lat={this.state.lat} lon={this.state.lon}/> : <Swipe
           onSwipeStart={this.onSwipeStart}
           onSwipeMove={this.onSwipeMove}
-          onSwipeEnd={this.onSwipeEnd}>
+          onSwipeEnd={this.onSwipeEnd}
+          >
 
 
             <CouponCard image={this.state.image_url}
@@ -135,7 +159,8 @@ class App extends React.Component {
               top={this.state.top}
               left={this.state.left}
               opacity={this.state.opacity}/>
-        </Swipe>
+            {<div id="saveCountContainer"><p>{this.state.saveCount} people have saved this coupon.</p></div>}
+        </Swipe>}
         <h4></h4>
           <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.YesButton}>Yes</button>
           <button type="button" className="btn btn-danger btn-lg btn-block" onClick={this.NoButton}>No</button>
