@@ -11,3 +11,10 @@ Next we implemented filtering coupons by multiple or single categories. We added
 We implemented cookies for login sessions and a fake auth for user accounts that simply stored passwords in plaintext. 
 
 Finally we updating some styling in the app before we deployed.
+
+To Start:
+
+```
+npm run compile
+npm start
+```
